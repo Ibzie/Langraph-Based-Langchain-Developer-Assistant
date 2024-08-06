@@ -3,3 +3,4 @@
 .gitattributes
 .idea
 .gitignore
+__pycache__
