@@ -65,7 +65,7 @@ answer_grader = get_retrieval_grader(llm, answer_prompt)
 question_rewriter = get_question_rewriter(question_rewrite_prompt, llm)
 
 # Define the RAG prompt template
-rag_template = """You are a RAG model combining retrieved documents to generate an answer. 
+rag_template = """You are an experienced Langchain Developer and Python Programmer using retrieved documents to generate an answer with sample code. 
 Here are the documents: \n ------- \n {document} \n ------- \n
 Here is the question: {question} 
 Generate a concise and accurate answer to the question using the information from the documents."""
@@ -105,16 +105,17 @@ workflow.add_conditional_edges(
 app = workflow.compile()
 
 # Step 6: Run the application
-question = "Hello!"
-while(question!="\q" or question!="\Q"):
-    inputs = {"question": "Eample Query: Explain what is Langchain as best as you can?"}
+question = input("Enter your query (or type '\q' or '\Q' to quit): ")
+
+while question != "\q" and question != "\Q":
+    inputs = {"question": question}
     for output in app.stream(inputs, {"recursion_limit": 500}):
         for key, value in output.items():
             pprint(f"Node '{key}':")
             pprint(value)
         pprint("\n---\n")
-    
-    question = input("Enter your next query: ")
 
     # Final generation
     pprint(value["generation"])
+
+    question = input("Enter your next query (or type '\q' or '\Q' to quit): ")
